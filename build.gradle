@@ -1,0 +1,58 @@
+plugins {
+	id 'org.springframework.boot' version '2.3.2.RELEASE'
+	id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+	id 'java'
+}
+
+group = 'com.covidsquid'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+ext {
+	set('springCloudVersion', "Hoxton.SR6")
+}
+
+dependencies {
+  implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.cloud:spring-cloud-starter-aws'
+	compileOnly 'org.projectlombok:lombok'
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+	annotationProcessor 'org.projectlombok:lombok'
+	testImplementation('org.springframework.boot:spring-boot-starter-test') {
+		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+	}
+  // https://mvnrepository.com/artifact/com.amazonaws/aws-java-sdk
+  compile group: 'com.amazonaws', name: 'aws-java-sdk', version: '1.11.828'
+  // https://mvnrepository.com/artifact/com.amazonaws/aws-java-sdk-core
+  compile group: 'com.amazonaws', name: 'aws-java-sdk-core', version: '1.11.828'
+  // https://mvnrepository.com/artifact/com.amazonaws/aws-java-sdk-dynamodb
+  compile group: 'com.amazonaws', name: 'aws-java-sdk-dynamodb', version: '1.11.820'
+  // https://mvnrepository.com/artifact/com.github.derjust/spring-data-dynamodb
+  compile group: 'com.github.derjust', name: 'spring-data-dynamodb', version: '5.0.4'
+  compile group: 'org.springframework.data', name: 'spring-data-commons', version: '2.3.1.RELEASE'
+  compile group: 'org.springframework.data', name: 'spring-data-releasetrain', version: 'Lovelace-SR18', ext: 'pom'
+  // https://mvnrepository.com/artifact/org.springframework.data/spring-data-commons-core
+  compile group: 'org.springframework.data', name: 'spring-data-commons-core', version: '1.4.1.RELEASE'
+}
+
+dependencyManagement {
+	imports {
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+	}
+}
+
+test {
+	useJUnitPlatform()
+}

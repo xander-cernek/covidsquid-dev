@@ -27,6 +27,7 @@ public class LocationService {
     if (newLocation.getCleanRating() != null) { oldLocation.setCleanRating(newLocation.getCleanRating()); }
     if (newLocation.getCrowdRating() != null) { oldLocation.setCrowdRating(newLocation.getCrowdRating()); }
     if (newLocation.getLastFiveRatings() != null) { oldLocation.setLastFiveRatings(newLocation.getLastFiveRatings()); }
+        if (newLocation.getLastUpdated() != null) { oldLocation.setLastUpdated(newLocation.getLastUpdated()); }
     if (newLocation.getMaskRating() != null) { oldLocation.setMaskRating(newLocation.getMaskRating()); }
     if (newLocation.getNumRatings() != null) { oldLocation.setNumRatings(newLocation.getNumRatings()); }
     if (newLocation.getTotalRating() != null) { oldLocation.setTotalRating(newLocation.getTotalRating()); }

@@ -23,6 +23,8 @@ ext {
 }
 
 dependencies {
+  // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-security
+  compile group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: '2.3.2.RELEASE'
   implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.cloud:spring-cloud-starter-aws'
@@ -33,6 +35,10 @@ dependencies {
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}
+  // // https://mvnrepository.com/artifact/org.springframework.security/spring-security-core
+  // compile group: 'org.springframework.security', name: 'spring-security-core', version: '5.3.3.RELEASE'
+  // // https://mvnrepository.com/artifact/org.springframework.security/spring-security-web
+  // compile group: 'org.springframework.security', name: 'spring-security-web', version: '5.3.3.RELEASE'
   // https://mvnrepository.com/artifact/com.amazonaws/aws-java-sdk
   compile group: 'com.amazonaws', name: 'aws-java-sdk', version: '1.11.828'
   // https://mvnrepository.com/artifact/com.amazonaws/aws-java-sdk-core

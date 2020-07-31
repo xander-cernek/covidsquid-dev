@@ -22,8 +22,9 @@ public class LocationMapSerializer {
       map.get(Location.ID_STRING).getS()
     );
     result.setLocationId(locationId);
-    result.setParentId(Location.PARENT_ID_STRING);
-    result.setId(Location.ID_STRING);
+    result.setParentId(locationId.getParentId());
+    result.setId(locationId.getId());
+    result.setName(map.get(Location.NAME_STRING).getS());
     result.setAddress(map.get(Location.ADDRESS_STRING).getS());
     result.setPictureUrl(map.get(Location.PICTURE_URL_STRING).getS());
     result.setLastUpdated(map.get(Location.LAST_UPDATED_STRING).getS());
@@ -35,6 +36,7 @@ public class LocationMapSerializer {
     result.setLastFiveRatings(
       deserializeList(map.get(Location.LAST_FIVE_RATINGS_STRING).getL())
     );
+    result.setRollingAverageRating(map.get(Location.ROLLING_AVERAGE_RATING_STRING).getS());
     return result;
   }
 

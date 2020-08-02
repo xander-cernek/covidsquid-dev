@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-@RequestMapping("/location")
+@RequestMapping("/api")
 @RestController
 @CrossOrigin
 public class LocationController {
@@ -31,6 +31,12 @@ public class LocationController {
 
   @Autowired
   LocationService locationService;
+
+  @ResponseBody
+  @RequestMapping(value="/ping", method=RequestMethod.GET, produces="application/json")
+  public Boolean ping() {
+    return true;
+  }
 
   @RequestMapping(value="/create", method=RequestMethod.POST, produces="application/json")
   public void createLocations(@RequestBody List<Location> locations) {
@@ -79,6 +85,5 @@ public class LocationController {
   public List<Location> getAllLocationsByParentId(@RequestParam String parentId) {
     return locationDao.getLocationsByParentId(parentId);
   }
-
 
 }

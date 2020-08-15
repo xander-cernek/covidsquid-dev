@@ -51,6 +51,12 @@ dependencies {
   compile group: 'org.springframework.data', name: 'spring-data-releasetrain', version: 'Lovelace-SR18', ext: 'pom'
   // https://mvnrepository.com/artifact/org.springframework.data/spring-data-commons-core
   compile group: 'org.springframework.data', name: 'spring-data-commons-core', version: '1.4.1.RELEASE'
+  // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-annotations
+  compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.11.2'
+  // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind
+  compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.11.2'
+  // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core
+  compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.11.2'
 }
 
 dependencyManagement {

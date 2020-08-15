@@ -48,7 +48,7 @@ public class LocationService {
   }
 
   private String averageList(List<String> list) {
-    Integer average = 0;
+    float average = 0;
     if (list.isEmpty()) {
       return "0";
     }

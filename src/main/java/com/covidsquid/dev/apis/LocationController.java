@@ -8,6 +8,7 @@ import com.covidsquid.dev.model.LocationId;
 import com.covidsquid.dev.repositories.LocationDao;
 import com.covidsquid.dev.repositories.LocationRepository;
 import com.covidsquid.dev.services.LocationService;
+import com.covidsquid.dev.services.RatingService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -31,6 +32,9 @@ public class LocationController {
 
   @Autowired
   LocationService locationService;
+
+  @Autowired
+  RatingService ratingService;
 
   @ResponseBody
   @RequestMapping(value="/ping", method=RequestMethod.GET, produces="application/json")
@@ -85,5 +89,4 @@ public class LocationController {
   public List<Location> getAllLocationsByParentId(@RequestParam String parentId) {
     return locationDao.getLocationsByParentId(parentId);
   }
-
 }

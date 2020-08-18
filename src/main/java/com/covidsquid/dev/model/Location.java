@@ -12,10 +12,12 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapperFieldModel.D
 
 import org.springframework.data.annotation.Id;
 
+import lombok.Builder;
 import lombok.Data;
 import lombok.Setter;
 
 @Setter
+@Builder
 @Data
 @DynamoDBTable(tableName = Location.TABLENAME)
 public class Location {
@@ -34,6 +36,7 @@ public class Location {
   public static final String NUM_RATING_STRING = "numRatings";
   public static final String LAST_FIVE_RATINGS_STRING = "lastFiveRatings";
   public static final String ROLLING_AVERAGE_RATING_STRING = "rollingAverageRating";
+  public static final String TAGS_STRING = "tags";
 
   @Id
   public LocationId locationId;
@@ -138,5 +141,13 @@ public class Location {
   @DynamoDBAttribute(attributeName = ROLLING_AVERAGE_RATING_STRING)
   public String getRollingAverageRating() {
     return rollingAverageRating != null ? rollingAverageRating : "0";
+  }
+
+  private List<String> tags;
+
+  @DynamoDBAttribute(attributeName = TAGS_STRING)
+  @DynamoDBTyped(DynamoDBAttributeType.L)
+  public List<String> tags() {
+    return tags != null ? tags : new ArrayList<>();
   }
 }

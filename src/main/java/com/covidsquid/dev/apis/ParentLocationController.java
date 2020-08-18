@@ -1,10 +1,8 @@
 package com.covidsquid.dev.apis;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import com.covidsquid.dev.model.GoogleLocation;
 import com.covidsquid.dev.model.Location;
 import com.covidsquid.dev.model.ParentLocation;
 import com.covidsquid.dev.model.RatingStatisticsResponse;
@@ -39,6 +37,9 @@ public class ParentLocationController {
   @Autowired
   RatingService ratingService;
 
+  @Autowired
+  LocationController locationController;
+
   @ResponseBody
   @RequestMapping(value="/ping", method=RequestMethod.GET, produces="application/json")
   public Boolean ping() {
@@ -57,16 +58,6 @@ public class ParentLocationController {
   }
 
   @ResponseBody
-  @RequestMapping(value="/getLocations", method=RequestMethod.GET, produces="application/json")
-  public List<GoogleLocation> getLocationsAroundParent(@RequestParam String parentId, @RequestParam String tag) {
-    Optional<ParentLocation> pOptional = getParentLocation(parentId);
-    if (pOptional.isPresent()) {
-      return parentLocationService.getGoogleMapsInfo(pOptional.get(), tag);
-    }
-    return Collections.emptyList();
-  }
-
-  @ResponseBody
   @RequestMapping(value="/ratingsStream", method=RequestMethod.GET, produces="application/json")
   public List<Location> getRatingsStream(@RequestParam String parentId) {
     try {
@@ -75,6 +66,14 @@ public class ParentLocationController {
     } catch (Exception e) {
       log.error("Error in getRatingsStream: {}", e);
       return null;
+    }
+  }
+
+  @RequestMapping(value="/postLocations", method=RequestMethod.POST)
+  public void saveCovidSquidLocations(@RequestParam String parentId, @RequestParam String tag) {
+    Optional<ParentLocation> pOptional = getParentLocation(parentId);
+    if (pOptional.isPresent()) {
+      locationController.createLocations(parentLocationService.googleMapsInfoToLocation(pOptional.get(), tag));
     }
   }
 

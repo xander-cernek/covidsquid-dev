@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 public class LocationMapSerializer {
 
   public Location deserializeFromMap(Map<String, AttributeValue> map) {
-    Location result = new Location();
+    Location result = Location.builder().build();
     LocationId locationId = new LocationId(
       map.get(Location.PARENT_ID_STRING).getS(),
       map.get(Location.ID_STRING).getS()

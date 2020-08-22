@@ -6,6 +6,7 @@ import java.util.Optional;
 import com.covidsquid.dev.model.GetLocationResponse;
 import com.covidsquid.dev.model.Location;
 import com.covidsquid.dev.model.LocationId;
+import com.covidsquid.dev.model.LocationRatingRequest;
 import com.covidsquid.dev.model.Rating;
 import com.covidsquid.dev.repositories.LocationDao;
 import com.covidsquid.dev.repositories.LocationRepository;
@@ -22,6 +23,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @RequestMapping("/api")
 @RestController
 @CrossOrigin
@@ -70,16 +74,16 @@ public class LocationController {
   }
 
   @RequestMapping(value="/rate", method=RequestMethod.POST, produces = "application/json")
-  public void rateLocation(@RequestBody Location location, @RequestBody String userId) {
+  public void rateLocation(@RequestBody LocationRatingRequest locationRatingRequest) {
     LocationId id = LocationId.builder()
-    .parentId(location.getParentId())
-    .id(location.getId())
+    .parentId(locationRatingRequest.getLocation().getParentId())
+    .id(locationRatingRequest.getLocation().getId())
     .build();
     Optional<Location> result = locationRepository.findById(id);
     if (result.isPresent()) {
       Location payload = result.get();
-      payload = locationService.rate(payload, location);
-      Rating ratingPayload = ratingService.getRatingFromLocation(payload, userId);
+      payload = locationService.rate(payload, locationRatingRequest.getLocation());
+      Rating ratingPayload = ratingService.getRatingFromLocation(payload, locationRatingRequest.getUserId());
       locationRepository.save(payload);
       ratingRepository.save(ratingPayload);
     }

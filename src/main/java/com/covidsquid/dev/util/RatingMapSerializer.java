@@ -12,17 +12,14 @@ import org.springframework.stereotype.Service;
 public class RatingMapSerializer {
 
   public Rating deserializeFromMap(Map<String, AttributeValue> map) {
-    Rating result = new Rating();
-    RatingId ratingId = new RatingId(
-      map.get(Rating.PARENT_ID_STRING).getS(),
-      map.get(Rating.USER_ID_STRING).getS()
-    );
-    result.setRatingId(ratingId);
-    result.setParentId(ratingId.getParentId());
-    result.setUserId(ratingId.getUserId());
-    result.setLocationId(map.get(Rating.LOCATION_ID_STRING).getS());
-    result.setLocationName(map.get(Rating.LOCATION_NAME_STRING).getS());
-    result.setRating(map.get(Rating.RATING_STRING).getS());
-    return result;
+    return Rating.builder()
+      .ratingId(RatingId.builder()
+        .parentId(map.get(Rating.PARENT_ID_STRING).getS())
+        .userId(map.get(Rating.USER_ID_STRING).getS())
+        .build())
+      .locationId(map.get(Rating.LOCATION_ID_STRING).getS())
+      .locationName(map.get(Rating.LOCATION_NAME_STRING).getS())
+      .rating(map.get(Rating.RATING_STRING).getS())
+      .build();
   }
 }

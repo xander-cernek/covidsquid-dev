@@ -3,11 +3,15 @@ package com.covidsquid.dev.apis;
 import java.util.List;
 import java.util.Optional;
 
+import com.covidsquid.dev.model.GetLocationResponse;
 import com.covidsquid.dev.model.Location;
 import com.covidsquid.dev.model.LocationId;
+import com.covidsquid.dev.model.Rating;
 import com.covidsquid.dev.repositories.LocationDao;
 import com.covidsquid.dev.repositories.LocationRepository;
+import com.covidsquid.dev.repositories.RatingRepository;
 import com.covidsquid.dev.services.LocationService;
+import com.covidsquid.dev.services.RatingService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -31,6 +35,12 @@ public class LocationController {
 
   @Autowired
   LocationService locationService;
+
+  @Autowired
+  RatingService ratingService;
+
+  @Autowired
+  RatingRepository ratingRepository;
 
   @ResponseBody
   @RequestMapping(value="/ping", method=RequestMethod.GET, produces="application/json")
@@ -60,7 +70,7 @@ public class LocationController {
   }
 
   @RequestMapping(value="/rate", method=RequestMethod.POST, produces = "application/json")
-  public void rateLocation(@RequestBody Location location) {
+  public void rateLocation(@RequestBody Location location, @RequestBody String userId) {
     LocationId id = LocationId.builder()
     .parentId(location.getParentId())
     .id(location.getId())
@@ -69,7 +79,9 @@ public class LocationController {
     if (result.isPresent()) {
       Location payload = result.get();
       payload = locationService.rate(payload, location);
+      Rating ratingPayload = ratingService.getRatingFromLocation(payload, userId);
       locationRepository.save(payload);
+      ratingRepository.save(ratingPayload);
     }
   }
 
@@ -82,7 +94,7 @@ public class LocationController {
 
   @ResponseBody
   @RequestMapping(value="/getAll", method=RequestMethod.GET, produces="application/json")
-  public List<Location> getAllLocationsByParentId(@RequestParam String parentId) {
+  public List<GetLocationResponse> getAllLocationsByParentId(@RequestParam String parentId) {
     return locationDao.getLocationsByParentId(parentId);
   }
 }

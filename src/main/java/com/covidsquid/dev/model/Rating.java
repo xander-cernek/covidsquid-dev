@@ -7,11 +7,13 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 
 import org.springframework.data.annotation.Id;
 
+import lombok.Builder;
 import lombok.Data;
 import lombok.Setter;
 
 @Setter
 @Data
+@Builder
 @DynamoDBTable(tableName = Rating.TABLENAME)
 public class Rating {
 

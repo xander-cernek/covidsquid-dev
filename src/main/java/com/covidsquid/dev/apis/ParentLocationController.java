@@ -3,8 +3,8 @@ package com.covidsquid.dev.apis;
 import java.util.List;
 import java.util.Optional;
 
-import com.covidsquid.dev.model.Location;
 import com.covidsquid.dev.model.ParentLocation;
+import com.covidsquid.dev.model.Rating;
 import com.covidsquid.dev.model.RatingStatisticsResponse;
 import com.covidsquid.dev.repositories.ParentLocationRepository;
 import com.covidsquid.dev.services.ParentLocationService;
@@ -59,10 +59,10 @@ public class ParentLocationController {
 
   @ResponseBody
   @RequestMapping(value="/ratingsStream", method=RequestMethod.GET, produces="application/json")
-  public List<Location> getRatingsStream(@RequestParam String parentId) {
+  public List<Rating> getRatingsStream(@RequestParam String parentId) {
     try {
       validateParentId(parentId);
-      return null;
+      return ratingService.getAllRatingsByParentId(parentId);
     } catch (Exception e) {
       log.error("Error in getRatingsStream: {}", e);
       return null;
@@ -78,14 +78,14 @@ public class ParentLocationController {
   }
 
   @RequestMapping(value="/updateStats/{parentId}", method=RequestMethod.POST, produces="application/json")
-  public void updateStats(@PathVariable(required=true, name="parentId") String parentId) {
+  public RatingStatisticsResponse updateStats(@PathVariable(required=true, name="parentId") String parentId) {
     try {
       validateParentId(parentId);
-      RatingStatisticsResponse response = ratingService.getRatingStatsByParentId(parentId);
-      log.info("Result from updateStats: Num ratings: {}, Avg rating: {}", response.getNumRatings(), response.getAverageRating());
+      return ratingService.getRatingStatsByParentId(parentId);
     } catch (Exception e) {
       log.error("Error in updateStats: {}", e);
     }
+    return null;
   }
 
   private void validateParentId(String parentId) throws Exception {

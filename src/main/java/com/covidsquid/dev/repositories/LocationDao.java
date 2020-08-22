@@ -10,6 +10,7 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.QueryRequest;
 import com.covidsquid.dev.config.DynamoDBConfig;
+import com.covidsquid.dev.model.GetLocationResponse;
 import com.covidsquid.dev.model.Location;
 import com.covidsquid.dev.util.LocationMapSerializer;
 
@@ -41,11 +42,11 @@ public class LocationDao {
   @Autowired
   private LocationMapSerializer locationMapSerializer;
 
-  public List<Location> getLocationsByParentId(String parentId) {
-    List<Location> result = new ArrayList<>();
+  public List<GetLocationResponse> getLocationsByParentId(String parentId) {
+    List<GetLocationResponse> result = new ArrayList<>();
     Iterator<Map<String, AttributeValue>> queryResult = queryByParentId(parentId);
     while (queryResult.hasNext()) {
-      result.add(locationMapSerializer.deserializeFromMap(queryResult.next()));
+      result.add(locationMapSerializer.deserializeFromMapV2(queryResult.next()));
     }
     return result;
   }

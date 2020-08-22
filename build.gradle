@@ -57,6 +57,8 @@ dependencies {
   compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.11.2'
   // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core
   compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.11.2'
+  // https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt
+  compile group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
 }
 
 dependencyManagement {

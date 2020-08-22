@@ -1,11 +1,13 @@
 package com.covidsquid.dev.apis;
 
 import java.util.Optional;
+import java.util.UUID;
 
-import com.covidsquid.dev.model.LoginRequest;
+import com.covidsquid.dev.model.RegisterRequest;
 import com.covidsquid.dev.model.SignupRequest;
 import com.covidsquid.dev.model.User;
 import com.covidsquid.dev.repositories.UserRepository;
+import com.covidsquid.dev.security.JwtAuthenticationController;
 import com.covidsquid.dev.util.SquidSecurity;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +26,9 @@ public class UserController {
   @Autowired
   UserRepository userRepository;
 
+  @Autowired
+  JwtAuthenticationController jwtAuthenticationController;
+
   @ResponseBody
   @RequestMapping(value="/ping", method=RequestMethod.GET, produces="application/json")
   public Boolean ping() {
@@ -31,18 +36,28 @@ public class UserController {
   }
 
   @RequestMapping(value="/signup", method=RequestMethod.POST, produces="application/json")
-  public void signup(@RequestBody SignupRequest signupRequest) {
+  public boolean signup(@RequestBody SignupRequest signupRequest) {
     String saltedPassword = SquidSecurity.getHashedAndSaltedPassword(signupRequest.getPassword()).toString();
-    User record = User.builder().username(signupRequest.getUsername()).password(saltedPassword).email(signupRequest.getEmail()).build();
+    //For now registered is true. Adding email later
+    User record = User.builder()
+      .email(signupRequest.getEmail())
+      .username(signupRequest.getUsername())
+      .password(saltedPassword)
+      .salt("undefined")
+      .registered(true)
+      .registerId(UUID.randomUUID().toString())
+      .sessionId("expired")
+      .build();
     userRepository.save(record);
+    return true;
   }
 
-  @RequestMapping(value="/login", method=RequestMethod.POST, produces="application/json")
-  public boolean login(@RequestBody LoginRequest loginRequest) {
-    Optional<User> user = userRepository.findById(loginRequest.getUsername());
-    if (user.isPresent()) {
-      if (loginRequest.getPassword().equals(user.get().getPassword())) {
-        return true;
+  @RequestMapping(value="/register", method=RequestMethod.POST, produces="application/json")
+  public boolean signup(@RequestBody RegisterRequest registerRequest) {
+    Optional<User> record = userRepository.findById(registerRequest.getEmail());
+    if (record.isPresent()) {
+      if (!record.get().getRegistered()) {
+        return registerRequest.getRegisterId().equals(record.get().getRegisterId());
       }
     }
     return false;

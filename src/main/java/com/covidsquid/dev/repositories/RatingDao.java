@@ -10,9 +10,8 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.QueryRequest;
 import com.covidsquid.dev.config.DynamoDBConfig;
-import com.covidsquid.dev.model.Location;
 import com.covidsquid.dev.model.Rating;
-import com.covidsquid.dev.util.LocationMapSerializer;
+import com.covidsquid.dev.model.RatingStatisticsResponse;
 import com.covidsquid.dev.util.RatingMapSerializer;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +20,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class RatingDao {
 
-	private String tableName = Location.TABLENAME;
+	private String tableName = Rating.TABLENAME;
 
   /* I have no idea why they do it this way, but you need a mapping for the
   key and the value. */
@@ -50,6 +49,22 @@ public class RatingDao {
       result.add(ratingMapSerializer.deserializeFromMap(queryResult.next()));
     }
     return result;
+  }
+
+  public RatingStatisticsResponse getRatingStatisticsByParentId(String parentId) {
+    long numRatings = 0;
+    Double ratingTotal = 0.0;
+    Iterator<Map<String, AttributeValue>> queryResult = queryByParentId(parentId);
+    while (queryResult.hasNext()) {
+      Rating rating = ratingMapSerializer.deserializeFromMap(queryResult.next());
+      numRatings++;
+      ratingTotal += Double.valueOf(rating.getRating());
+    }
+    Double averageRating = ratingTotal / numRatings;
+    return RatingStatisticsResponse.builder()
+            .numRatings(String.valueOf(numRatings))
+            .averageRating(String.valueOf(averageRating))
+            .build();
   }
 
   private Iterator<Map<String, AttributeValue>> queryByParentId(String parentId) {

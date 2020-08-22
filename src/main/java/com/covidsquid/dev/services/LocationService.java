@@ -21,6 +21,7 @@ public class LocationService {
     if (newLocation.getPictureUrl() != null) { oldLocation.setPictureUrl(newLocation.getPictureUrl()); }
     if (newLocation.getTotalRating() != null) { oldLocation.setTotalRating(newLocation.getTotalRating()); }
     if (newLocation.getRollingAverageRating() != null) { oldLocation.setRollingAverageRating(newLocation.getRollingAverageRating()); }
+    if (newLocation.getTags() != null) { oldLocation.setTags(newLocation.getTags()); }
     return oldLocation;
   }
 

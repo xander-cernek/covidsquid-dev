@@ -3,6 +3,7 @@ package com.covidsquid.dev.services;
 import java.util.List;
 import java.util.Optional;
 
+import com.covidsquid.dev.model.Location;
 import com.covidsquid.dev.model.Rating;
 import com.covidsquid.dev.model.RatingId;
 import com.covidsquid.dev.model.RatingStatisticsResponse;
@@ -31,6 +32,18 @@ public class RatingService {
 
   public List<Rating> getAllRatingsByParentId(String parentId) {
     return ratingDao.getRatingsByParentId(parentId);
+  }
+
+  public Rating getRatingFromLocation(Location location, String userId) {
+    return Rating.builder()
+            .locationId(location.getId())
+            .locationName(location.getName())
+            .rating(location.getTotalRating())
+            .ratingId(RatingId.builder()
+              .parentId(location.getParentId())
+              .userId(userId)
+              .build())
+            .build();
   }
 
   public RatingStatisticsResponse getRatingStatsByParentId(String parentId) {

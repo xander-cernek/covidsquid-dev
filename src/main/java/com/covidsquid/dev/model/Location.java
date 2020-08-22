@@ -12,13 +12,17 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapperFieldModel.D
 
 import org.springframework.data.annotation.Id;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Setter
 @Builder
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @DynamoDBTable(tableName = Location.TABLENAME)
 public class Location {
 

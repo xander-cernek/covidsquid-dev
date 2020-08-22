@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
+import com.covidsquid.dev.model.GetLocationResponse;
 import com.covidsquid.dev.model.Location;
 import com.covidsquid.dev.model.LocationId;
 
@@ -15,6 +16,19 @@ import org.springframework.stereotype.Service;
 @Service
 public class LocationMapSerializer {
 
+  public GetLocationResponse deserializeFromMapV2(Map<String, AttributeValue> map) {
+    return GetLocationResponse.builder()
+      .id(map.get(Location.ID_STRING).getS())
+      .parentId(map.get(Location.PARENT_ID_STRING).getS())
+      .name(map.get(Location.NAME_STRING).getS())
+      .address(map.get(Location.ADDRESS_STRING).getS())
+      .numRatings(map.get(Location.NUM_RATING_STRING).getS())
+      .rollingAverageRating(map.get(Location.ROLLING_AVERAGE_RATING_STRING).getS())
+      .tags(deserializeList(map.get(Location.TAGS_STRING).getL()))
+      .build();
+  }
+
+  @Deprecated
   public Location deserializeFromMap(Map<String, AttributeValue> map) {
     Location result = Location.builder().build();
     LocationId locationId = new LocationId(
@@ -37,6 +51,9 @@ public class LocationMapSerializer {
       deserializeList(map.get(Location.LAST_FIVE_RATINGS_STRING).getL())
     );
     result.setRollingAverageRating(map.get(Location.ROLLING_AVERAGE_RATING_STRING).getS());
+    result.setTags(
+      deserializeList(map.get(Location.TAGS_STRING).getL())
+    );
     return result;
   }
 
